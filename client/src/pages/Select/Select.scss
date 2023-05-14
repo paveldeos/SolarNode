@@ -1,42 +1,50 @@
 .select__wrapper {
-	display: grid;
-	grid-template-columns: repeat(4, 1fr);
-	height: 237px;
-	gap: 15px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  height: 237px;
+  gap: 15px;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: calc(80vh - 0px);
+  width: 100%;
 }
 
 .select__blockhain {
-	background: #FFFFFF;
-	border: 1px solid #3A2F2F;
-	border-radius: 14px;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	gap: 8px;
-	cursor: pointer;
-	
-	&:hover {
-		border: 3px solid #3A2F2F;
-		box-shadow: 0px 4px 7px rgba(0, 0, 0, 0.25);
-	}
-	
-	p {
-		font-size: 14px;
-	}
+  background: #FFFFFF;
+  border: 1px solid #3A2F2F;
+  border-radius: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+
+  &:hover {
+    border: 3px solid #3A2F2F;
+    box-shadow: 0px 4px 7px rgba(0, 0, 0, 0.25);
+  }
+
+  p {
+    font-size: 14px;
+  }
 }
 
 .select__container {
-	max-width: 1023px;
-	width: 100%;
-	padding: 0 15px;
-	margin: 0 auto;
+  max-width: 1023px;
+  width: 100%;
+  padding: 0 15px;
+  margin: 0 auto;
 }
 
 .select__title {
-	text-align: center;
-	font-weight: 300;
-	font-size: 15px;
-	margin-bottom: 15px;
-	margin-top: 30px;
+  text-align: center;
+  font-weight: 300;
+  font-size: 15px;
+  margin-bottom: 15px;
+  margin-top: 30px;
 }
