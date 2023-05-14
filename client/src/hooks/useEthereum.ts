@@ -29,7 +29,7 @@ export function useEthereum() {
                 const signer = provider.getSigner();
 
                 // Redirect to another page after successfully connecting
-                navigate("/select-blockchain");
+                navigate("/blockchains");
 
                 return {account, signer};
             } catch (err) {
