@@ -34,6 +34,13 @@ function App() {
     socket.on('data', function(data) {
       term.write(data);
     });
+
+    fetch('http://localhost:3000/ssh-nodes/Ethereum/0x173920A5F6a57715B3242BE61F10b482C0A50A8A')
+    .then(response => response.json())
+    .then(data => console.log(data))
+    .catch((error) => {
+      console.error('Error:', error);
+    });
   }, []);
 
   return (
