@@ -26,13 +26,17 @@ app.get('/ssh-nodes/:blockchain/:ethAddress', async (req, res) => {
     }
 });
 
-app.use(express.static('public'));
+// db.saveNode({
+//     ethAddress: '0x173920A5F6a57715B3242BE61F10b482C0A50A8A',
+//     ipAddress: '10.32.1.122',
+//     port: '23',
+//     blockchain: 'Ethereum',
+// }).then(() => console.log('SSH node saved'));
 
 server.listen(3000, function () {
     console.log('Server listening on port 3000');
 });
 
-// server.js
 io.on('connection', function(socket){
     const conn = new SSHClient();
     conn.on('ready', function() {
