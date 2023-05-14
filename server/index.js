@@ -26,38 +26,33 @@ app.get('/ssh-nodes/:blockchain/:ethAddress', async (req, res) => {
     }
 });
 
-// db.saveNode({
-//     ethAddress: '0x173920A5F6a57715B3242BE61F10b482C0A50A8A',
-//     ipAddress: '10.32.1.122',
-//     port: '23',
-//     blockchain: 'Ethereum',
-// }).then(() => console.log('SSH node saved'));
-
-server.listen(3000, function () {
-    console.log('Server listening on port 3000');
-});
-
 io.on('connection', function(socket){
-    const conn = new SSHClient();
-    conn.on('ready', function() {
+    socket.on('ssh-connect', function(params) {
+      const conn = new SSHClient();
+      conn.on('ready', function() {
         console.log('SSH Connection :: ready');
         conn.shell(function(err, stream) {
-            if (err) return socket.emit('data', err.message);
-            socket.on('data', function(data) {
-                stream.write(data);
-            });
-            stream.on('data', function(d) {
-                socket.emit('data', d.toString('binary'));
-            }).on('close', function() {
-                conn.end();
-            });
+          if (err) return socket.emit('data', err.message);
+          socket.on('data', function(data) {
+            stream.write(data);
+          });
+          stream.on('data', function(d) {
+            socket.emit('data', d.toString('binary'));
+          }).on('close', function() {
+            conn.end();
+          });
         });
-    }).on('error', function(err) {
+      }).on('error', function(err) {
         socket.emit('data', "\r\n*** SSH CONNECTION ERROR: " + err.message + " ***\r\n");
-    }).connect({
-        host: '10.32.1.122',
-        port: '23',
-        username: 'banana',
+      }).connect({
+        host: params.ipAddress,
+        port: params.port,
+        username: params.username,
         password: 'BPI-M2-zero'
+      });
     });
+});
+  
+server.listen(3000, function () {
+    console.log('Server listening on port 3000');
 });
