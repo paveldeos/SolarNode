@@ -1,11 +1,18 @@
-import {useEffect, useRef} from "react";
+import {FC, useEffect, useRef, useState} from "react";
 import 'xterm/css/xterm.css';
 import {io, Socket} from 'socket.io-client';
 import {Terminal as Xterm} from 'xterm';
 import './terminal.scss'
 import Layout from "../../components/Layout/Layout.tsx";
 
-const Terminal: React.FC = () => {
+interface TerminalProps {
+    ipAddress: string
+    port: string
+    username: string
+}
+
+const Terminal: FC<TerminalProps> = ({ipAddress, port, username}) => {
+    const [socket, setSocket] = useState<Socket | null>(null);
     const termRef = useRef<Xterm | null>(null);
     const terminalContainerRef = useRef<HTMLDivElement | null>(null);
     const cellWidth = 9; // Adjust based on your font size
@@ -16,9 +23,20 @@ const Terminal: React.FC = () => {
             const term = new Xterm()
             termRef.current = term;
             term.open(document.getElementById('terminal') as HTMLElement);
-            const socket: Socket = io('http://localhost:3000');
-            term.onData((data: string) => socket.emit('data', data));
-            socket.on('data', (data: string) => {
+            const socketIOClient: Socket = io('http://localhost:3000');
+            setSocket(socketIOClient);
+
+            // Send connection parameters to server
+            socketIOClient.emit('ssh-connect', {
+                ipAddress,
+                port,
+                username,
+                password: 'SSH_PASSWORD'
+            });
+
+            term.onData((data: string) => socketIOClient.emit('data', data));
+
+            socketIOClient.on('data', (data: string) => {
                 term.write(data);
             });
 
@@ -33,6 +51,7 @@ const Terminal: React.FC = () => {
             resizeObserver.observe(terminalContainerRef.current as Element);
 
             return () => {
+                socketIOClient.disconnect();
                 resizeObserver.disconnect();
             };
         }
